@@ -1,0 +1,109 @@
+:root {
+    --primary-color: #2A2A72;
+    --secondary-color: #009FFD;
+    --success-color: #2EB872;
+    --danger-color: #FF304F;
+}
+
+body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    font-family: 'Cairo', sans-serif;
+}
+
+.smart-nav {
+    display: flex;
+    justify-content: center;
+    background: var(--primary-color);
+    padding: 1rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-btn {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    margin: 0 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+    margin-top: 80px;
+}
+
+.smart-btn {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 1.5rem;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+#liveMap {
+    height: 70vh;
+    width: 100%;
+    margin-top: 80px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.tracking-timeline {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem auto;
+    max-width: 1200px;
+}
+
+.timeline-step {
+    background: var(--success-color);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    position: relative;
+    opacity: 0.3;
+    transition: all 0.5s;
+}
+
+.timeline-step.active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.admin-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+}
+
+.modal-content {
+    background: white;
+    width: 80%;
+    max-width: 600px;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 20px;
+    animation: modalSlide 0.5s ease-out;
+}
+
+@keyframes modalSlide {
+    from {transform: translateY(-100vh);}
+    to {transform: translateY(0);}
+}

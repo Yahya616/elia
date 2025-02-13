@@ -1,0 +1,96 @@
+// تهيئة النظام
+let currentProductId = 0;
+const products = {
+    pending: [],
+    approved: []
+};
+
+// تهيئة خدمات البريد
+emailjs.init('YOUR_EMAILJS_USER_ID');
+
+// نظام الإرسال المتقدم
+function submitProduct() {
+    const product = {
+        id: ++currentProductId,
+        name: document.getElementById('prodName').value,
+        price: document.getElementById('prodPrice').value,
+        image: document.getElementById('prodImage').files[0],
+        timestamp: new Date().toISOString()
+    };
+
+    // إرسال البريد
+    emailjs.send('service_id', 'template_id', {
+        to: 'yahya.hamid1993@gmail.com',
+        product_id: product.id,
+        details: JSON.stringify(product, null, 2)
+    }).then(() => {
+        products.pending.push(product);
+        updatePendingList();
+        alert('تم الإرسال بنجاح! رقم الطلب: ' + product.id);
+    });
+}
+
+// نظام التتبع الذكي
+let map, marker, intervalId;
+function initMap() {
+    map = new google.maps.Map(document.getElementById('liveMap'), {
+        center: {lat: 24.7136, lng: 46.6753},
+        zoom: 14,
+        mapTypeControl: false
+    });
+
+    marker = new google.maps.Marker({
+        position: map.getCenter(),
+        map: map,
+        icon: 'https://i.imgur.com/7vR0Pzq.png'
+    });
+
+    startTrackingSimulation();
+}
+
+function startTrackingSimulation() {
+    let step = 0;
+    intervalId = setInterval(() => {
+        const newPos = google.maps.geometry.spherical.computeOffset(
+            marker.getPosition(),
+            500, // meters
+            step * 10
+        );
+        marker.setPosition(newPos);
+        map.panTo(newPos);
+        step++;
+    }, 3000);
+}
+
+// نظام الموافقة الذكية
+function showApprovalModal(productId) {
+    const product = products.pending.find(p => p.id === productId);
+    document.getElementById('modalContent').innerHTML = `
+        <p><strong>الاسم:</strong> ${product.name}</p>
+        <p><strong>السعر:</strong> ${product.price}€</p>
+        <p><strong>وقت الإرسال:</strong> ${new Date(product.timestamp).toLocaleString()}</p>
+    `;
+    document.getElementById('approvalModal').style.display = 'block';
+}
+
+function approveProduct() {
+    const product = products.pending.shift();
+    products.approved.push(product);
+    updatePendingList();
+    document.getElementById('approvalModal').style.display = 'none';
+    alert('تمت الموافقة على المنتج: ' + product.name);
+}
+
+// نظام الذكاء الاصطناعي
+function smartRecommendation() {
+    if(products.approved.length > 10) {
+        alert('✨ النظام يقترح عمل عرض خاص على المنتجات الأكثر مبيعًا!');
+    }
+}
+
+// Service Worker للتثبيت
+if('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+    .then(() => console.log('Service Worker مسجل!'))
+    .catch(err => console.log('خطأ:', err));
+}
